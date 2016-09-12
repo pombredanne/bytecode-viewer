@@ -41,6 +41,9 @@ import java.util.zip.ZipInputStream;
 
 public class JarUtils {
 
+	private JarUtils() {
+	}
+
 	/**
 	 * Loads the classes and resources from the input jar file
 	 * @param jarFile the input jar file
@@ -192,9 +195,9 @@ public class JarUtils {
 	 */
 	public static void saveAsJar(ArrayList<ClassNode> nodeList, String path,
 			String manifest) {
-		try {
-			JarOutputStream out = new JarOutputStream(
-					new FileOutputStream(path));
+		try (JarOutputStream out = new JarOutputStream(
+				new FileOutputStream(path))) {
+			
 			for (ClassNode cn : nodeList) {
 				ClassWriter cw = new ClassWriter(0);
 				cn.accept(cw);
@@ -218,7 +221,6 @@ public class JarUtils {
 					}
 				}
 
-			out.close();
 		} catch (IOException e) {
 			new the.bytecode.club.bytecodeviewer.api.ExceptionUI(e);
 		}
@@ -230,8 +232,7 @@ public class JarUtils {
 	 * @param path the exact jar output path
 	 */
 	public static void saveAsJarClassesOnly(ArrayList<ClassNode> nodeList, String path) {
-		try {
-			JarOutputStream out = new JarOutputStream(new FileOutputStream(path));
+		try (JarOutputStream out = new JarOutputStream(new FileOutputStream(path))) {
 			ArrayList<String> noDupe = new ArrayList<String>();
 			for (ClassNode cn : nodeList) {
 				ClassWriter cw = new ClassWriter(0);
@@ -248,15 +249,13 @@ public class JarUtils {
 			}
 
 			noDupe.clear();
-			out.close();
 		} catch (IOException e) {
 			new the.bytecode.club.bytecodeviewer.api.ExceptionUI(e);
 		}
 	}
 
 	public static void saveAsJarClassesOnly(Map<String, byte[]> nodeList, String path) {
-		try {
-			JarOutputStream out = new JarOutputStream(new FileOutputStream(path));
+		try (JarOutputStream out = new JarOutputStream(new FileOutputStream(path))) {
 			ArrayList<String> noDupe = new ArrayList<String>();
 			for (Entry<String, byte[]> cn : nodeList.entrySet()) {
 				String name = cn.getKey();
@@ -269,15 +268,13 @@ public class JarUtils {
 			}
 
 			noDupe.clear();
-			out.close();
 		} catch (IOException e) {
 			new the.bytecode.club.bytecodeviewer.api.ExceptionUI(e);
 		}
 	}
 
 	public static void saveAsJar(Map<String, byte[]> nodeList, String path) {
-		try {
-			JarOutputStream out = new JarOutputStream(new FileOutputStream(path));
+		try (JarOutputStream out = new JarOutputStream(new FileOutputStream(path))) {
 			ArrayList<String> noDupe = new ArrayList<String>();
 			for (Entry<String, byte[]> entry : nodeList.entrySet()) {
 				String name = entry.getKey();
@@ -303,7 +300,6 @@ public class JarUtils {
 				}
 
 			noDupe.clear();
-			out.close();
 		} catch (IOException e) {
 			new the.bytecode.club.bytecodeviewer.api.ExceptionUI(e);
 		}
